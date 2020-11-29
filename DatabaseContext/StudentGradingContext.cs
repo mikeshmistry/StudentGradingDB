@@ -7,6 +7,9 @@ using System.Text;
 
 namespace DatabaseContext
 {
+    /// <summary>
+    /// Context class that will be the main connection for the student grading database
+    /// </summary>
    public class StudentGradingContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
