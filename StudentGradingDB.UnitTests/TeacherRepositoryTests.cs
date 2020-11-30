@@ -12,8 +12,46 @@ namespace StudentGradingDB.UnitTests
     /// Unit test class to test teacher repository class
     /// </summary>
     [TestClass]
-   public class TeacherRepositoryTests
+   public class TeacherRepositoryTests : TestHelper
     {
+        #region Repository
+
+        /// <summary>
+        /// Teacher repository 
+        /// </summary>
+        private TeacherRepository teacherRepository;
+
+        #endregion
+
+        #region Setup and CleanUp for tests
+
+        /// <summary>
+        /// Runs once per test case
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            //setup the connection and context
+            SetupConnectionAndContext();
+
+            //setup the teacher repository
+            teacherRepository = new TeacherRepository(Context);
+
+        }
+
+
+        /// <summary>
+        /// Runs after each test
+        /// </summary>
+        [TestCleanup]
+        public void CleanUp()
+        {
+            //close the connection
+            Connection.Close();
+        }
+
+        #endregion
+
         #region Add, Update, Delete Tests
 
         /// <summary>
@@ -22,28 +60,7 @@ namespace StudentGradingDB.UnitTests
         [TestMethod]
         public void AddTeacher()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the teacher repository 
-                var teacherRepository = new TeacherRepository(context);
-
+           
                 //create the new teacher
                 var newTeacher = new Teacher()
                 {
@@ -67,43 +84,13 @@ namespace StudentGradingDB.UnitTests
                 Assert.AreEqual(newTeacher.LastName, teacher[0].LastName);
             }
 
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
-        }
-
-
         /// <summary>
         /// Test to update a single teacher into the database
         /// </summary>
         [TestMethod]
         public void UpdateTeacher()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the teacher repository 
-                var teacherRepository = new TeacherRepository(context);
-
+           
                 //create the new teacher
                 var newTeacher = new Teacher()
                 {
@@ -143,15 +130,9 @@ namespace StudentGradingDB.UnitTests
 
                 //Updated LastName are equal
                 Assert.AreEqual(updatedTeacher.LastName, changedTeacher.LastName);
-
             }
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
-        }
+         
+        
 
         /// <summary>
         /// Test to delete a single teacher from the database
@@ -159,28 +140,6 @@ namespace StudentGradingDB.UnitTests
         [TestMethod]
         public void DeleteTeacher()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the teacher repository 
-                var teacherRepository = new TeacherRepository(context);
-
                 //create the new student
                 var newTeacher = new Teacher()
                 {
@@ -210,24 +169,11 @@ namespace StudentGradingDB.UnitTests
 
                 //count should be zero
                 Assert.AreEqual(0, teacherListAfterRemoved.Count());
-
             }
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
-        }
-
-
+         
         #endregion
 
         #region Other Query Tests
-
-
-
-
 
         #endregion
     }

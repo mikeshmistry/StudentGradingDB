@@ -8,12 +8,49 @@ using System.Linq;
 
 namespace StudentGradingDB.UnitTests
 {
-    /// <summary>
-    /// Unit test class to test course repository class
-    /// </summary>
-    [TestClass]
-  public  class CourseRepositoryTests
+  /// <summary>
+  /// Unit test class to test course repository class
+  /// </summary>
+  [TestClass]
+  public  class CourseRepositoryTests : TestHelper
   {
+        #region Repository
+
+        /// <summary>
+        /// Course repository 
+        /// </summary>
+        private CourseRepository courseRepository;
+
+        #endregion
+
+        #region Setup and CleanUp for tests
+
+        /// <summary>
+        /// Runs once per test case
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            //setup the connection and context
+            SetupConnectionAndContext();
+
+            //setup the course repository
+            courseRepository = new CourseRepository(Context);
+
+        }
+
+
+        /// <summary>
+        /// Runs after each test
+        /// </summary>
+        [TestCleanup]
+        public void CleanUp()
+        {
+            //close the connection
+            Connection.Close();
+        }
+
+        #endregion
 
         #region Add, Update, Delete Tests
 
@@ -23,28 +60,6 @@ namespace StudentGradingDB.UnitTests
         [TestMethod]
         public void AddCourse()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the course repository 
-                var courseRepository = new CourseRepository(context);
-
                 //create the new course
                 var newCourse = new Course()
                 {
@@ -66,14 +81,9 @@ namespace StudentGradingDB.UnitTests
 
                 //Description are equal
                 Assert.AreEqual(newCourse.Description, courses[0].Description);
-            }
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
         }
+           
+        
 
 
         /// <summary>
@@ -82,28 +92,7 @@ namespace StudentGradingDB.UnitTests
         [TestMethod]
         public void UpdateCourse()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the course repository 
-                var courseRepository = new CourseRepository(context);
-
+            
                 //create the new course
                 var newCourse = new Course()
                 {
@@ -146,14 +135,7 @@ namespace StudentGradingDB.UnitTests
 
             }
 
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
-        }
-
+           
 
         /// <summary>
         /// Test to delete a single course from the database
@@ -161,27 +143,6 @@ namespace StudentGradingDB.UnitTests
         [TestMethod]
         public void DeleteCourse()
         {
-            // In-memory database only exists while the connection is open
-            var connection = new SqliteConnection("DataSource=:memory:");
-
-            //open the connection 
-            connection.Open();
-
-            try
-            {
-                var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(connection)
-                       .Options;
-
-                //create the context class
-                var context = new StudentGradingContext(options);
-
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                //create the course repository 
-                var courseRepository = new CourseRepository(context);
 
                 //create the new course
                 var newCourse = new Course()
@@ -212,25 +173,12 @@ namespace StudentGradingDB.UnitTests
 
                 //count should be zero
                 Assert.AreEqual(0, courseListAfterRemoved.Count());
-
-
             }
-            finally
-            {
-
-                //close the connection
-                connection.Close();
-            }
-        }
-
+            
 
         #endregion
 
         #region Other Query Tests
-
-
-
-
 
         #endregion
 
