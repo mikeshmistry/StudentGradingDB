@@ -8,7 +8,7 @@ namespace StudentGradingDB.UnitTests
     /// Unit test class to test grade repository class
     /// </summary>
     [TestClass]
-    class GradeRepositoryTests
+  public  class GradeRepositoryTests
     {
     }
 }

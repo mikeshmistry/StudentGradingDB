@@ -12,9 +12,33 @@ namespace DatabaseContext
     /// </summary>
    public class StudentGradingContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public StudentGradingContext()
         {
 
+        }
+
+
+        /// <summary>
+        /// Constructor that takes in a context options
+        /// </summary>
+        /// <param name="options">The options object</param>
+        public StudentGradingContext(DbContextOptions<StudentGradingContext> options) :base(options)
+        {
+            
+        }
+
+        #endregion 
+
+       
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
