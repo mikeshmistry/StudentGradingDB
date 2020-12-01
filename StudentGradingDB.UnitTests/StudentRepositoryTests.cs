@@ -184,6 +184,9 @@ namespace StudentGradingDB.UnitTests
             Assert.IsNull(coursesList);
         }
 
+        /// <summary>
+        /// Test to get all enrolled courses for a student
+        /// </summary>
         [TestMethod]
         public void GetEnrolledCourse_StudentFound_ReturnsCourses()
         {
@@ -210,20 +213,20 @@ namespace StudentGradingDB.UnitTests
             courseRepository.AddRange(courseList);
 
             //use the find method to find a student 
-            var foundstudent = studentRepository.Find(student => student.FirstName == "Mikesh" && student.LastName == "Mistry").FirstOrDefault();
+            var foundStudent = studentRepository.Find(student => student.FirstName == "Mikesh" && student.LastName == "Mistry").FirstOrDefault();
 
             //found the student
-            if (foundstudent != null)
+            if (foundStudent != null)
             {
                 //enroll the student into the two course
                 foreach (var course in courseList)
                 {
-                    courseRepository.EnrollStudentIntoCourse(foundstudent.StudentId, course.CourseId);
+                    courseRepository.EnrollStudentIntoCourse(foundStudent.StudentId, course.CourseId);
                 }
 
 
                 //get the found student
-                var studentCourseList = studentRepository.GetId(foundstudent.StudentId);
+                var studentCourseList = studentRepository.GetId(foundStudent.StudentId);
 
                 if (studentCourseList != null)
                 {
@@ -235,7 +238,7 @@ namespace StudentGradingDB.UnitTests
                     Assert.AreEqual(courseListCount, studentEnrolledCoursesCount);
 
                     //insure that ids are the same
-                    Assert.AreEqual(foundstudent.StudentId, studentCourseList.StudentId);
+                    Assert.AreEqual(foundStudent.StudentId, studentCourseList.StudentId);
 
 
                 }
