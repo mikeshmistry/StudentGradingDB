@@ -53,6 +53,7 @@ namespace Repositories
             //check to see if the teacher exists
             var teacher = StudentGradingContext.Teachers
                           .Where(teacher => teacher.TeacherId == teacherId)
+                          .Include(teacher => teacher.Courses)
                           .FirstOrDefault();
 
 
@@ -91,7 +92,7 @@ namespace Repositories
         /// <param name="teacherId">The id of the teacher to check</param>
         /// <param name="courseId">The id of the course to check</param>
         /// <returns>True if the course is already assigned to the teacher. False otherwise</returns>
-        public bool IsCourseAssignedToTeacher(int teacherId, int courseId)
+        private bool IsCourseAssignedToTeacher(int teacherId, int courseId)
         {
             var isAssignedToCourse = false;
 
@@ -166,7 +167,7 @@ namespace Repositories
         /// <param name="studentId">The id of the student to check</param>
         /// <param name="courseId">The id of the course to check</param>
         /// <returns>True if the student is already enrolled into to the course. False otherwise</returns>
-        public bool IsStudentEnrolledinCourse(int studentId, int courseId)
+        private bool IsStudentEnrolledinCourse(int studentId, int courseId)
         {
             var isAssignedToCourse = false;
 
