@@ -1,6 +1,6 @@
-﻿using Entities;
+﻿using DatabaseContext;
+using Entities;
 using Microsoft.EntityFrameworkCore;
-using DatabaseContext;
 using System.Linq;
 
 namespace Repositories
@@ -23,8 +23,8 @@ namespace Repositories
                 return Context as StudentGradingContext;
             }
         }
-                 
-        #endregion 
+
+        #endregion
 
         #region Constructors 
 
@@ -55,6 +55,7 @@ namespace Repositories
             //check to see if the student exists
             var student = StudentGradingContext.Students
                           .Where(student => student.StudentId == studentId)
+                          .Include(g => g.Grades)
                           .FirstOrDefault();
 
             var course = StudentGradingContext.Courses
@@ -74,11 +75,14 @@ namespace Repositories
                 {
                     var newGrade = new Grade();
                     newGrade.Student = student;
+                    newGrade.LetterGrade = grade;
                     newGrade.Course = course;
 
-                    Add(newGrade);
-                    StudentGradingContext.SaveChanges();
-
+                    
+                   
+                        student.Grades.Add(newGrade);
+                        StudentGradingContext.SaveChanges();
+                    
                     added = true;
                 }
 

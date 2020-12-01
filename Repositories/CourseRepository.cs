@@ -128,6 +128,7 @@ namespace Repositories
             //check to see if the student exists
             var student = StudentGradingContext.Students
                           .Where(student => student.StudentId == studentId)
+                          .Include(c => c.Courses)
                           .FirstOrDefault();
 
 
