@@ -88,6 +88,23 @@ namespace Repositories
             return studentGrades;
         }
 
+
+        /// <summary>
+        /// Method to delete a student from the database
+        /// </summary>
+        /// <param name="teacherId">The id of the student to delete</param>
+        public void DeleteStudent(int studentId)
+        {
+            var student = StudentGradingContext.Students
+                         .Where(student => student.StudentId == studentId)
+                         .Include(student => student.Courses)
+                         .Include(student => student.Grades)
+                         .FirstOrDefault();
+
+            if (student != null)
+                Remove(student);
+        }
+
         #endregion
     }
 }

@@ -65,9 +65,22 @@ namespace Repositories
         }
 
 
-       
 
-     
+        /// <summary>
+        /// Method to delete a teacher from the database
+        /// </summary>
+        /// <param name="teacherId">The id of the teacher to delete</param>
+        public void DeleteTeacher(int teacherId)
+        {
+            var teacher = StudentGradingContext.Teachers
+                         .Where(teacher => teacher.TeacherId == teacherId)
+                         .Include(teacher => teacher.Courses)
+                         .FirstOrDefault();
+
+            if (teacher != null)
+                Remove(teacher);
+        }
+
 
         #endregion
     }

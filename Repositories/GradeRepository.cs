@@ -78,11 +78,11 @@ namespace Repositories
                     newGrade.LetterGrade = grade;
                     newGrade.Course = course;
 
-                    
-                   
-                        student.Grades.Add(newGrade);
-                        StudentGradingContext.SaveChanges();
-                    
+
+
+                    student.Grades.Add(newGrade);
+                    StudentGradingContext.SaveChanges();
+
                     added = true;
                 }
 
@@ -112,6 +112,8 @@ namespace Repositories
 
             return result;
         }
+
+      
 
 
         #endregion

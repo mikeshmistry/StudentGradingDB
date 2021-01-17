@@ -191,6 +191,19 @@ namespace Repositories
             return isAssignedToCourse;
         }
 
+        /// <summary>
+        /// Method to delete a course from the database
+        /// </summary>
+        /// <param name="courseId">The courseId of the course to delete</param>
+        public void DeleteCourse(int courseId)
+        {
+            var course = Find(course => course.CourseId == courseId)
+                         .FirstOrDefault();
+
+            if (course != null)
+                Remove(course);
+        }
+
         #endregion
 
 
