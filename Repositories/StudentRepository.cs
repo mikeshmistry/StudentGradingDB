@@ -53,6 +53,7 @@ namespace Repositories
             var courses = StudentGradingContext.Students
                           .Where(c => c.StudentId == id)
                           .Include(c => c.Courses)
+                          .AsNoTracking()
                           .FirstOrDefault();
 
 
@@ -78,6 +79,7 @@ namespace Repositories
             var grades = StudentGradingContext.Students
                          .Where(grade => grade.StudentId == id)
                          .Include(student => student.Grades)
+                         .AsNoTracking()
                          .FirstOrDefault();
 
 
