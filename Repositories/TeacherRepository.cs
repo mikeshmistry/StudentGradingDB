@@ -53,6 +53,7 @@ namespace Repositories
             var courses = StudentGradingContext.Teachers
                           .Where(c => c.TeacherId == id)
                           .Include(c => c.Courses)
+                          .AsNoTracking()
                           .FirstOrDefault();
 
 
