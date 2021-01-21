@@ -32,6 +32,7 @@ namespace Repositories
         public Repository(DbContext dbContext)
         {
             Context = dbContext;
+            Context.Database.EnsureCreated();
         }
 
         #endregion

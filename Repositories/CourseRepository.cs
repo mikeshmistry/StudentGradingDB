@@ -138,7 +138,7 @@ namespace Repositories
                          .Where(course => course.CourseId == courseId)
                          .FirstOrDefault();
 
-            //the teacher exists and the course is a valid course
+            //the student exists and the course is a valid course
             if (student != null && course != null)
             {
                 var isAssignedToCourse = IsStudentEnrolledinCourse(studentId, courseId);
