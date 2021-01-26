@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿
+using Entities;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,37 +9,36 @@ using System.Text;
 namespace DatabaseContext
 {
     /// <summary>
-    /// Context class that will be the main connection for the student grading database
+    /// Context class that will be the main connection for testing student grading database
     /// </summary>
-   public class StudentGradingContext : DbContext
+   public class StudentGradingTestContext : DbContext
     {
+
+        #region Properties 
+
+        #endregion
+
+        public SqliteConnection Connection { get; set; }
 
         #region Constructors
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public StudentGradingContext() :base()
+        public StudentGradingTestContext() : base()
         {
-
+            Connection = new SqliteConnection("DataSource =:memory: ");
         }
 
 
-        /// <summary>
-        /// Constructor that takes in a context options
-        /// </summary>
-        /// <param name="options">The options object</param>
-        public StudentGradingContext(DbContextOptions<StudentGradingContext> options) :base(options)
-        {
-            
-        }
-
+     
         #endregion 
 
        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS; Database=UniversityDB;Trusted_Connection=True;");
+
+            optionsBuilder.UseSqlite(Connection);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
