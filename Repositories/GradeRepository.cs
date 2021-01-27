@@ -19,7 +19,7 @@ namespace Repositories
         /// <param name="context">The context object for the database</param>
         public GradeRepository(DbContext context) : base(context)
         {
-           
+
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace Repositories
         {
             var added = false;
 
-         
+
 
             //check to see if the student exists
             var student = Context.Set<Student>()
@@ -72,6 +72,24 @@ namespace Repositories
 
                     added = true;
                 }
+                else
+                {
+                    //update the grade 
+                    var updatedGrade = Find(grade => grade.Student.StudentId == student.StudentId
+                                           && grade.Course.CourseId == course.CourseId
+                                          ).FirstOrDefault();
+
+                    //found the grade update the letter grade
+                    if (updatedGrade != null)
+                    {
+                        updatedGrade.LetterGrade = grade;
+                        Update(updatedGrade);
+                        added = true;
+                    }
+
+
+
+                }
 
 
             }
@@ -99,9 +117,6 @@ namespace Repositories
 
             return result;
         }
-
-      
-
 
         #endregion
 
