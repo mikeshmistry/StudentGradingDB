@@ -12,14 +12,9 @@ namespace StudentGradingDB.UnitTests
         #region Properties
 
         /// <summary>
-        /// Property to set the SQLite test database
-        /// </summary>
-        protected SqliteConnection Connection { get; set; }
-
-        /// <summary>
         /// Property to set the context of the database and open it
         /// </summary>
-        protected StudentGradingContext Context { get; set; }
+        protected StudentGradingTestContext Context { get; set; }
 
         #endregion
 
@@ -28,19 +23,15 @@ namespace StudentGradingDB.UnitTests
         /// </summary>
        protected void SetupConnectionAndContext()
         {
-            Connection = new SqliteConnection("DataSource=:memory:");
+          
             
-            //create the options
-            var options = new DbContextOptionsBuilder<StudentGradingContext>()
-                       .UseSqlite(Connection)
-                       .Options;
-
             //set the context
-            Context = new StudentGradingContext(options);
+            Context = new StudentGradingTestContext();
 
             //Opens the connection
-            Connection.Open();
+            Context.Connection.Open(); ;
 
+            //Delete the In Memory Database for testing
             Context.Database.EnsureDeleted();
             Context.Database.EnsureCreated();
 

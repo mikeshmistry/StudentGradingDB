@@ -47,7 +47,8 @@ namespace StudentGradingDB.UnitTests
         public void CleanUp()
         {
             //close the connection
-            Connection.Close();
+            ///Connection.Close();
+            Context.Dispose();
         }
 
         #endregion
@@ -66,6 +67,7 @@ namespace StudentGradingDB.UnitTests
                     Name = "Introduction To C# Programming",
                     Description = "Course to introduce students to C# programming"
                 };
+
 
                 //add the course to the database
                 courseRepository.Add(newCourse);

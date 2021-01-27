@@ -42,7 +42,8 @@ namespace StudentGradingDB.UnitTests
         public void CleanUp()
         {
             //close the connection
-            Connection.Close();
+            Context.Connection.Close();
+            
         }
 
         #endregion
