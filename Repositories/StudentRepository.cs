@@ -11,21 +11,7 @@ namespace Repositories
     /// </summary>
     public class StudentRepository : Repository<Student>
     {
-        #region Properties
-
-        /// <summary>
-        /// private property to get a connection to the Student grading context
-        /// </summary>
-        private StudentGradingContext StudentGradingContext
-        {
-            get
-            {
-                return Context as StudentGradingContext;
-            }
-        }
-
-        #endregion
-
+       
         #region Constructors 
 
         /// <summary>
@@ -50,7 +36,7 @@ namespace Repositories
         {
             List<Course> studentCourses = null;
 
-            var courses = StudentGradingContext.Students
+            var courses = Context.Set<Student>()
                           .Where(c => c.StudentId == id)
                           .Include(c => c.Courses)
                           .AsNoTracking()
@@ -76,7 +62,7 @@ namespace Repositories
             List<Grade> studentGrades = null;
 
 
-            var grades = StudentGradingContext.Students
+            var grades = Context.Set<Student>()
                          .Where(grade => grade.StudentId == id)
                          .Include(student => student.Grades)
                          .AsNoTracking()
@@ -97,7 +83,7 @@ namespace Repositories
         /// <param name="teacherId">The id of the student to delete</param>
         public void DeleteStudent(int studentId)
         {
-            var student = StudentGradingContext.Students
+            var student = Context.Set<Student>()
                          .Where(student => student.StudentId == studentId)
                          .Include(student => student.Courses)
                          .Include(student => student.Grades)

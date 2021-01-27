@@ -11,21 +11,6 @@ namespace Repositories
     public class GradeRepository : Repository<Grade>
     {
 
-        #region Properties
-
-        /// <summary>
-        /// private property to get a connection to the Student grading context
-        /// </summary>
-        private StudentGradingContext StudentGradingContext
-        {
-            get
-            {
-                return Context as StudentGradingContext;
-            }
-        }
-
-        #endregion
-
         #region Constructors 
 
         /// <summary>
@@ -34,7 +19,7 @@ namespace Repositories
         /// <param name="context">The context object for the database</param>
         public GradeRepository(DbContext context) : base(context)
         {
-
+           
         }
 
         #endregion
@@ -52,13 +37,15 @@ namespace Repositories
         {
             var added = false;
 
+         
+
             //check to see if the student exists
-            var student = StudentGradingContext.Students
+            var student = Context.Set<Student>()
                           .Where(student => student.StudentId == studentId)
                           .Include(g => g.Grades)
                           .FirstOrDefault();
 
-            var course = StudentGradingContext.Courses
+            var course = Context.Set<Course>()
                         .Where(course => course.CourseId == courseId)
                         .FirstOrDefault();
 
@@ -81,7 +68,7 @@ namespace Repositories
 
 
                     student.Grades.Add(newGrade);
-                    StudentGradingContext.SaveChanges();
+                    Context.SaveChanges();
 
                     added = true;
                 }
@@ -103,7 +90,7 @@ namespace Repositories
         {
             var result = false;
 
-            var gradeRecord = StudentGradingContext.Grades
+            var gradeRecord = Context.Set<Grade>()
                             .Where(grade => grade.Student.StudentId == studentId && grade.Course.CourseId == courseId)
                             .FirstOrDefault();
 

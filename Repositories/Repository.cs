@@ -31,8 +31,8 @@ namespace Repositories
         /// <param name="dbContext">the database connection to use</param>
         public Repository(DbContext dbContext)
         {
-            Context = dbContext;
-            Context.Database.EnsureCreated();
+             Context = dbContext;
+         
         }
 
         #endregion

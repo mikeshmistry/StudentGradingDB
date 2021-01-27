@@ -2,6 +2,7 @@
 using Entities;
 using DatabaseContext;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Repositories
 {
@@ -10,20 +11,6 @@ namespace Repositories
     /// </summary>
     public class CourseRepository : Repository<Course>
     {
-        #region Properties
-
-        /// <summary>
-        /// private property to get a connection to the Student grading context
-        /// </summary>
-        private StudentGradingContext StudentGradingContext
-        {
-            get
-            {
-                return Context as StudentGradingContext;
-            }
-        }
-
-        #endregion
 
         #region Constructors 
 
@@ -48,17 +35,19 @@ namespace Repositories
         /// <returns>True if the teacher is assigned to a course</returns>
         public bool AssignTeacherToCourse(int teacherId, int courseId)
         {
+
             var added = false;
 
+
             //check to see if the teacher exists
-            var teacher = StudentGradingContext.Teachers
+            var teacher = Context.Set<Teacher>()
                           .Where(teacher => teacher.TeacherId == teacherId)
                           .Include(teacher => teacher.Courses)
                           .FirstOrDefault();
 
 
             //check to see if the course exists
-            var course = StudentGradingContext.Courses
+            var course = Context.Set<Course>()
                          .Where(course => course.CourseId == courseId)
                          .FirstOrDefault();
 
@@ -72,7 +61,7 @@ namespace Repositories
                 {
                     //add the course to the teacher
                     teacher.Courses.Add(course);
-                    StudentGradingContext.SaveChanges();
+                    Context.SaveChanges();
                     added = true;
 
                 }
@@ -80,7 +69,7 @@ namespace Repositories
 
             }
 
-           
+
             return added;
         }
 
@@ -96,7 +85,7 @@ namespace Repositories
         {
             var isAssignedToCourse = false;
 
-            var teacherCourses = StudentGradingContext.Teachers
+            var teacherCourses = Context.Set<Teacher>()
                             .Where(teacher => teacher.TeacherId == teacherId)
                             .Include(teacher => teacher.Courses)
                             .FirstOrDefault();
@@ -122,19 +111,19 @@ namespace Repositories
         /// <param name="studentId">The student id</param>
         /// <param name="courseId">The id of the course to enroll the student</param>
         /// <returns>True if the student was enrolled in the course.False otherwise</returns>
-        public bool EnrollStudentIntoCourse(int studentId,int courseId)
+        public bool EnrollStudentIntoCourse(int studentId, int courseId)
         {
             var added = false;
 
             //check to see if the student exists
-            var student = StudentGradingContext.Students
+            var student = Context.Set<Student>()
                           .Where(student => student.StudentId == studentId)
                           .Include(c => c.Courses)
                           .FirstOrDefault();
 
 
             //check to see if the course exists
-            var course = StudentGradingContext.Courses
+            var course = Context.Set<Course>()
                          .Where(course => course.CourseId == courseId)
                          .FirstOrDefault();
 
@@ -148,7 +137,7 @@ namespace Repositories
                 {
                     //add the course to the student
                     student.Courses.Add(course);
-                    StudentGradingContext.SaveChanges();
+                    Context.SaveChanges();
                     added = true;
 
                 }
@@ -160,6 +149,29 @@ namespace Repositories
 
         }
 
+        /// <summary>
+        /// Method get all the students enrolled in a course
+        /// </summary>
+        /// <param name="courseId">The courseid to find</param>
+        /// <returns>A list of students enrolled</returns>
+        public List<Student> GetEnrolledStudents(int courseId)
+        {
+            var studentList = new List<Student>();
+
+            studentList = Context.Set<Course>()
+                        .Where(course => course.CourseId == courseId)
+                        .Include(course => course.Student)
+                        .Select(course => new Student()
+                        {
+                            StudentId = course.Student.StudentId,
+                            FirstName = course.Student.FirstName,
+                            LastName = course.Student.LastName
+
+                        }).ToList<Student>();
+
+
+            return studentList;
+        }
 
         /// <summary>
         /// Query to check to see if a student is already enrolled into to a course
@@ -171,7 +183,7 @@ namespace Repositories
         {
             var isAssignedToCourse = false;
 
-            var studentCourses = StudentGradingContext.Students
+            var studentCourses = Context.Set<Student>()
                             .Where(student => student.StudentId == studentId)
                             .Include(teacher => teacher.Courses)
                             .FirstOrDefault();

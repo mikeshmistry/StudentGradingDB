@@ -11,20 +11,6 @@ namespace Repositories
     /// </summary>
     public class TeacherRepository : Repository<Teacher>
     {
-        #region Properties
-
-        /// <summary>
-        /// private property to get a connection to the Student grading context
-        /// </summary>
-        private StudentGradingContext StudentGradingContext
-        {
-            get
-            {
-                return Context as StudentGradingContext;
-            }
-        }
-
-        #endregion
 
         #region Constructors 
 
@@ -50,7 +36,7 @@ namespace Repositories
         {
             List<Course> teacherCourses = null;
 
-            var courses = StudentGradingContext.Teachers
+            var courses = Context.Set<Teacher>()
                           .Where(c => c.TeacherId == id)
                           .Include(c => c.Courses)
                           .AsNoTracking()
@@ -73,7 +59,7 @@ namespace Repositories
         /// <param name="teacherId">The id of the teacher to delete</param>
         public void DeleteTeacher(int teacherId)
         {
-            var teacher = StudentGradingContext.Teachers
+            var teacher = Context.Set<Teacher>()
                          .Where(teacher => teacher.TeacherId == teacherId)
                          .Include(teacher => teacher.Courses)
                          .FirstOrDefault();
