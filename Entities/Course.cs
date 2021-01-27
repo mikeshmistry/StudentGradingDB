@@ -29,6 +29,13 @@ namespace Entities
         public string Description { get; set; }
         #endregion
 
+        #region RelationShips
 
+        /// <summary>
+        /// One to many relationship between student and grade entity 
+        /// </summary>
+        public Student Student { get; set; }
+
+        #endregion 
     }
 }

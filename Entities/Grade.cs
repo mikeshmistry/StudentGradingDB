@@ -26,6 +26,9 @@ namespace Entities
         [MaxLength(2)]
         public string LetterGrade { get; set; }
 
+        
+        
+
         #endregion
 
         #region Relationships
