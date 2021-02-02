@@ -118,6 +118,23 @@ namespace Repositories
             return result;
         }
 
+        /// <summary>
+        /// Query to find a grade record
+        /// </summary>
+        /// <param name="courseId">The courseId</param>
+        /// <param name="studentId">The studentId</param>
+        /// <returns>A grade object if found. Null otherwise</returns>
+        public Grade FindGrade(int courseId, int studentId)
+        {
+            var foundGrade = Context.Set<Grade>()
+                              .Where(grade => grade.Student.StudentId == studentId && grade.Course.CourseId == courseId)
+                               .Include(grade => grade.Student)
+                               .Include(grade => grade.Course)
+                               .FirstOrDefault();
+            
+            return foundGrade;
+        }
+
         #endregion
 
 

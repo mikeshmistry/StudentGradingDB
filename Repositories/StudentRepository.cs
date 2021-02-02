@@ -59,18 +59,14 @@ namespace Repositories
         /// <returns>A list of student grades null if not found</returns>
         public List<Grade> GetGrades(int id)
         {
-            List<Grade> studentGrades = null;
+            List<Grade> studentGrades = new List<Grade>();
 
 
-            var grades = Context.Set<Student>()
-                         .Where(grade => grade.StudentId == id)
-                         .Include(student => student.Grades)
+            studentGrades = Context.Set<Grade>()
+                         .Where(grade => grade.Student.StudentId == id)
+                         .Include(grade => grade.Course)
                          .AsNoTracking()
-                         .FirstOrDefault();
-
-
-            if (grades != null)
-                studentGrades = grades.Grades.ToList();
+                         .ToList<Grade>();
 
 
             return studentGrades;
